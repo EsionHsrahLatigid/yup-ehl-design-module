@@ -1,0 +1,39 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 31,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "module-release",
+      "displayName": "EHL YUP UI contract tests (Release)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/module-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "EHL_YUP_PLUGIN_UI_BUILD_TESTS": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "module-release",
+      "configurePreset": "module-release",
+      "targets": [
+        "ehl_yup_plugin_ui_contract_tests"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "module-release",
+      "configurePreset": "module-release",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}
