@@ -19,6 +19,52 @@ inline constexpr std::uint32_t transparent = 0x00000000u;
 
 inline constexpr yup::Size<int> preferredSize { 640, 360 };
 inline constexpr float grid = 4.0f;
+inline constexpr yup::Rectangle<float> shortLogoViewBox { 0.0f, 0.0f, 512.0f, 192.0f };
+inline constexpr yup::Rectangle<float> headerLogoBounds { 528.0f, 12.0f, 96.0f, 36.0f };
+
+// Canonical EHL short mark from assets/logos/white/logo-short.svg. Keeping the
+// path in the header makes plugin rendering independent of bundle resource paths.
+inline constexpr const char* shortLogoPathData =
+    "M133.18,66.35 L133.18,40.94 L56.94,40.94 L56.94,66.35 Z "
+    "M285.65,104.47 L285.65,118.32 L311.06,118.32 L311.06,104.47 L311.06,79.06 L285.65,79.06 L217.88,79.06 L217.88,24.00 L192.47,24.00 L192.47,79.06 L192.47,104.47 L192.47,142.59 L217.88,142.59 L217.88,111.55 L225.96,111.55 L225.96,107.06 L250.61,107.06 L250.61,104.47 Z "
+    "M193.15,108.96 L193.15,101.76 L242.53,101.76 L242.53,104.35 L201.23,104.35 L201.23,108.96 Z "
+    "M473.74,136.32 L473.74,142.59 L480.47,142.59 L480.47,117.18 L395.76,117.18 L395.76,53.52 L381.70,53.52 L381.70,49.20 L395.76,49.20 L395.76,24.00 L370.35,24.00 L370.35,117.18 L370.35,142.59 L395.76,142.59 L449.04,142.59 L449.04,136.32 Z "
+    "M158.59,91.76 L158.59,66.35 L133.18,66.35 L133.18,69.36 L152.74,69.36 L152.74,73.68 L133.18,73.68 L133.18,91.76 L56.94,91.76 L56.94,73.68 L49.49,73.68 L49.49,69.36 L56.94,69.36 L56.94,66.35 L31.53,66.35 L31.53,91.76 L31.53,117.18 L31.53,142.59 L56.94,142.59 L56.94,117.18 L158.59,117.18 Z "
+    "M285.65,142.59 L311.06,142.59 L311.06,122.64 L285.65,122.64 Z "
+    "M158.59,142.59 L56.94,142.59 L56.94,168.00 L158.59,168.00 Z";
+
+inline const yup::Path& shortLogoPath()
+{
+    static const auto path = []
+    {
+        yup::Path result;
+        result.fromString (yup::String (shortLogoPathData));
+        return result;
+    }();
+
+    return path;
+}
+
+inline void paintShortLogo (yup::Graphics& graphics,
+                            const yup::Rectangle<float>& targetBounds,
+                            std::uint32_t color = paper)
+{
+    if (targetBounds.isEmpty())
+        return;
+
+    const auto scale = std::min (targetBounds.getWidth() / shortLogoViewBox.getWidth(),
+                                 targetBounds.getHeight() / shortLogoViewBox.getHeight());
+    const auto width = shortLogoViewBox.getWidth() * scale;
+    const auto height = shortLogoViewBox.getHeight() * scale;
+    const auto x = targetBounds.getX() + (targetBounds.getWidth() - width) * 0.5f;
+    const auto y = targetBounds.getY() + (targetBounds.getHeight() - height) * 0.5f;
+    const auto transform = yup::AffineTransform::scaling (scale).translated (x, y);
+    const auto savedState = graphics.saveState();
+
+    graphics.setFillColor (yup::Color (color));
+    graphics.addTransform (transform);
+    graphics.fillPath (shortLogoPath());
+}
 
 struct IndicatorCell
 {
@@ -225,6 +271,13 @@ inline void paintEditorBackground (yup::Graphics& graphics, float width, float h
         for (int bit = 0; bit <= column; ++bit)
             graphics.fillRect (x + grid + bit * (grid * 2.0f), height - 24.0f, grid, grid);
     }
+
+    const auto scale = width / static_cast<float> (preferredSize.getWidth());
+    paintShortLogo (graphics,
+                    { headerLogoBounds.getX() * scale,
+                      headerLogoBounds.getY() * scale,
+                      headerLogoBounds.getWidth() * scale,
+                      headerLogoBounds.getHeight() * scale });
 }
 
 } // namespace ehl::ui

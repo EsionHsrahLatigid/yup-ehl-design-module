@@ -12,6 +12,7 @@ This module builds on [YUP](https://github.com/kunitoki/yup). The visual contrac
 
 - Fixed EHL four-level monochrome palette.
 - Compact `640x360` editor contract on a 4 px grid.
+- Canonical one-color EHL short mark rendered directly from verified path geometry.
 - Square pixel slider with a tested clockwise parameter indicator.
 - Reusable command button, segmented meter, label styling, and editor background.
 - Header-only CMake target: `ehl::yup_plugin_ui`.
@@ -48,7 +49,10 @@ target_link_libraries(your_plugin_shared INTERFACE ehl::yup_plugin_ui)
 
 auto slider = std::make_unique<ehl::ui::PixelSlider> (yup::Slider::RotaryVerticalDrag);
 auto meter = std::make_unique<ehl::ui::StripMeter> (ehl::ui::paper);
+ehl::ui::paintShortLogo (graphics, { 528.0f, 12.0f, 96.0f, 36.0f });
 ```
+
+`paintEditorBackground` includes the short EHL mark in the compact header by default.
 
 The stable surface is documented in [DESIGN_CONTRACT.md](./DESIGN_CONTRACT.md).
 

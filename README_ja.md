@@ -12,6 +12,7 @@ YUPオーディオプラグイン向けの、EsionHsrahLatigid共通モノクロ
 
 - EHLの4段階モノクロパレットを固定。
 - 4pxグリッド上のコンパクトな`640x360`エディタ契約。
+- 検証済みpath geometryから直接描画する、1色の正式EHL short mark。
 - 時計回りのパラメーターインジケータをテストする角形ピクセルスライダー。
 - 共通のコマンドボタン、セグメントメーター、ラベルスタイル、エディタ背景。
 - ヘッダオンリーCMakeターゲット: `ehl::yup_plugin_ui`。
@@ -48,7 +49,10 @@ target_link_libraries(your_plugin_shared INTERFACE ehl::yup_plugin_ui)
 
 auto slider = std::make_unique<ehl::ui::PixelSlider> (yup::Slider::RotaryVerticalDrag);
 auto meter = std::make_unique<ehl::ui::StripMeter> (ehl::ui::paper);
+ehl::ui::paintShortLogo (graphics, { 528.0f, 12.0f, 96.0f, 36.0f });
 ```
+
+`paintEditorBackground`は、コンパクトなヘッダー内へEHL short markを標準描画します。
 
 安定APIは[DESIGN_CONTRACT.md](./DESIGN_CONTRACT.md)に記載しています。
 

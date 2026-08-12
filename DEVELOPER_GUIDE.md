@@ -21,4 +21,7 @@ Without a sibling checkout, configuration fetches the pinned YUP revision used b
 5. Verify staged Standalone, VST3, and AU bundles on macOS and Standalone/VST3 bundles on Windows.
 6. Commit each consumer update separately.
 
+When the canonical logo changes, update both `assets/logos/white/logo-short.svg` and
+`shortLogoPathData`. The contract test intentionally fails if their path data diverges.
+
 Do not add a local wrapper or copy of `EhlPluginTheme.h` to a consumer. The Gitlink must remain the only source of shared UI implementation.
