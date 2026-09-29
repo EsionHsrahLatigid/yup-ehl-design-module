@@ -52,5 +52,8 @@ if(EHL_YUP_PLUGIN_UI_BUILD_TESTS)
     target_compile_features(ehl_yup_plugin_ui_contract_tests PRIVATE cxx_std_20)
     target_compile_definitions(ehl_yup_plugin_ui_contract_tests PRIVATE
         EHL_YUP_PLUGIN_UI_SOURCE_DIR="${CMAKE_CURRENT_LIST_DIR}")
+    # YUP's Objective-C++ module sources require ARC (e.g. __weak in yup_events);
+    # apply it to them the same way YUP does for its own app and plugin targets.
+    _yup_module_apply_arc_to_target_sources(ehl_yup_plugin_ui_contract_tests ehl::yup_plugin_ui)
     add_test(NAME ehl_yup_plugin_ui_contract_tests COMMAND ehl_yup_plugin_ui_contract_tests)
 endif()
